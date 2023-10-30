@@ -1,0 +1,8 @@
+name: ToolCore
+main: DOHWI\ToolCore\ToolCore
+src-namespace-prefix: DOHWI\ToolCore
+api: 5.0.0
+depend:
+- CustomItemLoader
+version: 1.0.0
+author: dohwi
