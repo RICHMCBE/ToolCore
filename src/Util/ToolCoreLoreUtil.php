@@ -33,7 +33,7 @@ final class ToolCoreLoreUtil
             } else if ($tool instanceof Axe) {
                 $lore[] = "§r- LV 1 : 내구도 무한";
                 $lore[] = "§r- LV 2 : 자동줍기";
-                $lore[] = "§r- LV 3 : 코인 추가습득";
+                $lore[] = "§r- LV 3 : 돈 추가습득";
             } else if ($tool instanceof Hoe) {
                 $lore[] = "§r- LV 1 : 내구도 무한";
                 $lore[] = "§r- LV 2 : 넓은 범위 경작";

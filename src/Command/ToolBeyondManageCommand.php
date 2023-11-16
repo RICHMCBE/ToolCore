@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DOHWI\ToolCore\Command;
 
+use alvin0319\CustomItemLoader\item\CustomToolItem;
 use DOHWI\ToolCore\Form\ToolBeyondForm;
 use DOHWI\ToolCore\ToolCore;
 use DOHWI\ToolCore\Util\LevelToolUtil;
@@ -43,19 +44,32 @@ final class ToolBeyondManageCommand extends Command
 		$TLevel = (int) $args[0];
 
 		if(!$hand instanceof Tool) {
+            echo "isn't tool item\n";
 			$sender->sendMessage(ToolCore::Prefix."레벨도구에만 초월을 할 수 있습니다");
 			return;
 		}
 		if(!LevelToolUtil::isLevelTool($hand)) {
+            echo "isn't level tool\n";
 			$sender->sendMessage(ToolCore::Prefix."레벨도구에만 초월을 할 수 있습니다");
 			return;
 		}
-		$toolId = match (true) {
-			$hand instanceof Pickaxe => 0,
-			$hand instanceof Axe => 1,
-			$hand instanceof Hoe => 2,
-			default => false
-		};
+        if($hand instanceof CustomToolItem){
+            $toolId = match ($hand->getBlockToolType()){
+                4 => 0,
+                8 => 1,
+                32 => 2,
+                default => false
+            };
+
+        }else{
+            $toolId = match (true) {
+                $hand instanceof Pickaxe => 0,
+                $hand instanceof Axe => 1,
+                $hand instanceof Hoe => 2,
+                default => false
+            };
+        }
+
 		if($toolId !== false) {
 			if($TLevel > 3) {
 				$sender->sendMessage(ToolCore::Prefix."3레벨까지만 초월이 가능합니다");
