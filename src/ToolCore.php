@@ -21,7 +21,7 @@ use Symfony\Component\Filesystem\Path;
 
 final class ToolCore extends PluginBase
 {
-    public const Prefix = "§l§b[알림] §r§f";
+    public const Prefix = "§r§6ㆍ§r§f";
 
     private static Config $config;
 

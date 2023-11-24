@@ -36,7 +36,7 @@ final class LevelToolEnhanceInventory extends InvMenu
 
 	private const CHANCES = [
 		0 => 90, // 0 -> 1 성공확률
-		1 => 70, // 1 -> 2 성공확률
+		1 => 80, // 1 -> 2 성공확률
 		2 => 60, // 2 -> 3 성공확률
 		3 => 50, // 3 -> 4 성공확률
 		4 => 40, // 4 -> 5 성공확률
@@ -44,6 +44,17 @@ final class LevelToolEnhanceInventory extends InvMenu
 		6 => 3, // 6 -> 7 성공확률
 		7 => 1, // 7 -> 8 성공확률
 	];
+
+    private const BROKEN = [
+        0 => 1, // 0 -> 1 파괴확률
+        1 => 2, // 1 -> 2 파괴확률
+        2 => 5, // 2 -> 3 파괴확률
+        3 => 10, // 3 -> 4 파괴확률
+        4 => 20, // 4 -> 5 파괴확률
+        5 => 30, // 5 -> 6 파괴확률
+        6 => 40, // 6 -> 7 파괴확률
+        7 => 55, // 7 -> 8 파괴확률
+    ];
 
 	public function __construct()
 	{
@@ -92,21 +103,27 @@ final class LevelToolEnhanceInventory extends InvMenu
 				if($enchantIndex === null) {
 					$player->sendMessage(ToolCore::Prefix."알 수 없는 오류입니다. 방법을 제보해주세요!");
 				} else {
-					$beforeLevel = $target->getEnchantmentLevel($enchant);
-					$maxLevel = self::MAX_LEVELS[$enchantIndex];
-					$rand = rand(1, 100);
-					$chance = self::CHANCES[$enchantIndex];
-					if($beforeLevel >= $maxLevel) {
-						$player->sendMessage(ToolCore::Prefix."해당 강화는 최대 레벨을 도달하였습니다");
-					} else if($chance >= $rand) {
-						$this->getInventory()->removeItem($target);
-						$this->getInventory()->removeItem($ticket);
-						$player->getInventory()->addItem(EnchantUtil::updateEnchantment($target, $enchant, $beforeLevel + 1, $maxLevel));
-						$player->sendMessage(ToolCore::Prefix."축하합니다 강화에 성공했습니다 !");
-					} else {
-						$this->getInventory()->removeItem($ticket);
-						$player->sendMessage(ToolCore::Prefix."강화에 실패하였습니다");
-					}
+                    $beforeLevel = $target->getEnchantmentLevel($enchant);
+                    $item = $this->getInventory()->getItem(self::SLOT_INPUT_ITEM);
+                    $maxLevel = self::MAX_LEVELS[$enchantIndex];
+                    $rand = rand(1, 100);
+                    $chance = self::CHANCES[$enchantIndex];
+                    $broken = self::BROKEN[$enchantIndex];
+                    if ($beforeLevel >= $maxLevel) {
+                        $player->sendMessage(ToolCore::Prefix . "해당 강화는 최대 레벨을 도달하였습니다");
+                    } else if ($chance >= $rand) {
+                        $this->getInventory()->removeItem($target);
+                        $this->getInventory()->removeItem($ticket);
+                        $player->getInventory()->addItem(EnchantUtil::updateEnchantment($target, $enchant, $beforeLevel + 1, $maxLevel));
+                        $player->sendMessage(ToolCore::Prefix . "축하합니다 강화에 성공했습니다 !");
+                    } else if ($broken >= $rand) {
+                        $this->getInventory()->removeItem($ticket);
+                        $this->getInventory()->removeItem($item);
+                        $player->sendMessage(ToolCore::Prefix . "강화하다가 미끄러져서 도구가 파괴되었습니다.");
+                    } else {
+                        $this->getInventory()->removeItem($ticket);
+                        $player->sendMessage(ToolCore::Prefix . "강화에 실패하였습니다");
+                    }
 				}
 			}
 			$player->removeCurrentWindow();
