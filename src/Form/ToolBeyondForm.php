@@ -61,7 +61,7 @@ final class ToolBeyondForm implements Form
             $player->sendMessage(ToolCore::Prefix . "초월에 실패하였습니다");
 	        if ($this->beforeLevel === 0) return;
 			$rand = mt_rand(1,100);
-			if ($rand <= 10 * ($this->beforeLevel + 1)){
+			if ($rand <= 400 * ($this->beforeLevel + 1)){
 				$player->sendMessage(ToolCore::Prefix . "도구가 힘을 버티지 못하고 터져버렸습니다 !");
 				$player->getInventory()->removeItem($this->tool);
 			}
